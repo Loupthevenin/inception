@@ -6,14 +6,17 @@
 #    By: ltheveni <ltheveni@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/22 14:31:16 by ltheveni          #+#    #+#              #
-#    Updated: 2025/02/22 14:37:41 by ltheveni         ###   ########.fr        #
+#    Updated: 2025/02/24 17:59:22 by ltheveni         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 DOCKER_COMPOSE = docker-compose
 DOCKER_COMPOSE_FILE = ./srcs/docker-compose.yml
 
-up:
+build:
+	@$(DOCKER_COMPOSE) -f $(DOCKER_COMPOSE_FILE) build
+
+up: build
 	@$(DOCKER_COMPOSE) -f $(DOCKER_COMPOSE_FILE) up
 
 start:
