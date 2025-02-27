@@ -38,6 +38,16 @@ services:
     networks:
       - inception
 
+  # BONUS
+  redis:
+    build: ./requirements/bonus/redis/
+    container_name: redis
+    restart: always
+    depends_on:
+      - wordpress
+    networks:
+      - inception
+
 # volume 42: /home/ltheveni/data/mysql avec la cmd : mdkir -p /home/ltheveni/data/mysql : pareil pour nginx_volume
 volumes:
   wordpress_volume:
