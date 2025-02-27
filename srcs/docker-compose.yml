@@ -6,9 +6,34 @@ services:
     ports:
       - "443:443"
     volumes:
-      - ./requirements/nginx/html:/var/www/html
+      - nginx_volume:/var/www/html
     networks:
       - inception
+  mariadb:
+    build: ./requirements/mariadb/
+    container_name: mariadb
+    restart: always
+    volumes:
+      - mariadb_volume:/var/lib/mysql
+    env_file:
+      - .env
+    networks:
+      - inception
+
+# volume 42: /home/ltheveni/data/mysql avec la cmd : mdkir -p /home/ltheveni/data/mysql : pareil pour nginx_volume
+volumes:
+  nginx_volume:
+    driver: local
+    driver_opts:
+      type: none
+      device: ./requirements/nginx/html
+      o: bind
+  mariadb_volume:
+    driver: local
+    driver_opts:
+      type: none
+      device: /tmp/ltheveni/data/mysql
+      o: bind
 
 networks:
   inception:
