@@ -5,10 +5,13 @@ services:
     restart: always
     ports:
       - "443:443"
+    depends_on:
+      - wordpress
     volumes:
-      - nginx_volume:/var/www/html
+      - wordpress_volume:/var/www/wordpress
     networks:
       - inception
+
   mariadb:
     build: ./requirements/mariadb/
     container_name: mariadb
@@ -20,13 +23,28 @@ services:
     networks:
       - inception
 
+  wordpress:
+    build: ./requirements/wordpress/
+    container_name: wordpress
+    restart: always
+    ports:
+      - "9000:9000"
+    depends_on:
+      - mariadb
+    volumes:
+      - wordpress_volume:/var/www/wordpress
+    env_file:
+      - .env
+    networks:
+      - inception
+
 # volume 42: /home/ltheveni/data/mysql avec la cmd : mdkir -p /home/ltheveni/data/mysql : pareil pour nginx_volume
 volumes:
-  nginx_volume:
+  wordpress_volume:
     driver: local
     driver_opts:
       type: none
-      device: ./requirements/nginx/html
+      device: /tmp/ltheveni/data/wordpress
       o: bind
   mariadb_volume:
     driver: local
@@ -37,4 +55,4 @@ volumes:
 
 networks:
   inception:
-    driver: bridge
+    name: inception
