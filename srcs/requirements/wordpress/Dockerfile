@@ -2,6 +2,7 @@ FROM debian:bullseye
 
 RUN apt update -y && apt upgrade -y && apt install -y \
 	php-fpm \
+	php-redis\
 	php-mysql \
 	php-cli \
 	php-json \
@@ -15,6 +16,7 @@ RUN apt update -y && apt upgrade -y && apt install -y \
 	wget \
 	unzip \
 	mariadb-client \
+	redis-tools \
 	&& apt clean
 
 RUN mkdir -p /var/www /run/php
