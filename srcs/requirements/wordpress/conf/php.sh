@@ -11,12 +11,18 @@ sed -i "s/database_name_here/$MYSQL_DATABASE/g" wp-config-sample.php
 cp /var/www/wordpress/wp-config-sample.php /var/www/wordpress/wp-config.php
 
 # BONUS REDIS
-echo "extension=redis.so" >/etc/php/7.4/fpm/conf.d/redis.ini
+curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar &&
+	chmod +x wp-cli.phar &&
+	mv wp-cli.phar /usr/local/bin/wp
 
-if ! grep -q "define('WP_REDIS_HOST', 'redis');" wp-config.php; then
-	echo "define('WP_REDIS_HOST', 'redis');" >>/var/www/wordpress/wp-config.php
-	echo "define('WP_REDIS_PORT', 6379);" >>/var/www/wordpress/wp-config.php
-	echo "define('WP_CACHE', true);" >>/var/www/wordpress/wp-config.php
-fi
+wp config set WP_REDIS_HOST "redis" --add --allow-root
+wp config set WP_REDIS_PORT "6379" --add --allow-root
+wp config set WP_CACHE "true" --allow-root
+
+wp install redis-cache --allow-root --path="/var/www/wordpress"
+wp plugin activate redis-cache --allow-root --path="/var/www/wordpress/"
+wp redis enable --allow-root
+
+chown -R www-data:www-data /var/www/wordpress
 
 exec php-fpm7.4 -F
