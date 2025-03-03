@@ -17,6 +17,7 @@ RUN apt update -y && apt upgrade -y && apt install -y \
 	unzip \
 	mariadb-client \
 	redis-tools \
+	curl \
 	&& apt clean
 
 RUN mkdir -p /var/www /run/php
